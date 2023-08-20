@@ -23,7 +23,19 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:2000/');
+        const response = await fetch("http://localhost:2000/post", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+          key1: 'value1',
+          key2: 'value2'
+        })
+        });
+          
+  
+
         const jsonData = await response.json();
         setCandlestickData(jsonData);
         setLoading(false);
@@ -56,9 +68,7 @@ function App() {
         bottomColor: 'rgba(41, 98, 255, 0.28)',
       });
 
-      areaSeries.setData([
-        // ... Data for area series ...
-      ]);
+    
 
       candlestickSeries = chart.addCandlestickSeries({
         upColor: '#26a69a',
@@ -99,15 +109,14 @@ function App() {
     plFunction();
   }, [buy_price, pos, iloc, qnt, candlestickData, sell_price]);
 
-
   function buy(){
     var price=parseFloat(candlestickData[iloc].close);
-    console.log(parseInt(fund/price))
-    if(pos===0 ){ if(fund>(qnt*price)){ 
+    // console.log(parseInt(fund/price))
+    if(pos===0 ){ if(fund>(Math.abs(qnt)*price)){ 
    
     pvalue(parseInt(pos)+parseInt(qnt));
     bvalue((price));
-    fvalue((fund-(price*qnt)));}
+    fvalue((fund-(price*Math.abs(qnt))));}
     else{
       alert("qnt less =<"+parseInt(fund/price))
     }
@@ -115,26 +124,33 @@ function App() {
   }
    else if(pos<0){
     var price=parseFloat(candlestickData[iloc].close);
-    pvalue(pos+qnt);
     bvalue((price));
-    fvalue((fund+(sell_price+(sell_price-price))*qnt));
-    cbvalue((cb+pl));
+    fvalue(parseFloat(fund+(sell_price+(sell_price-price))*Math.abs(pos)));
+    cbvalue(parseFloat(cb+pl));
+    pvalue(0);
+
     plvalue(0);
 
 
    }
 
   }
+  function setmaxq(){
+    var num=(fund/parseInt(parseFloat(candlestickData[iloc].close)));
+    qvalue(parseInt(num));
+
+    document.getElementById('qnt').value=parseInt(num)
+  }
 
 
   function sell(){
     var price=parseFloat(candlestickData[iloc].close);
 
-    console.log(parseInt(fund/price));
-    if(pos===0){ if(fund>(qnt*price)){ 
+    // console.log(parseInt(fund/price));
+    if(pos===0){ if(fund>(Math.abs(qnt)*price)){ 
     pvalue(parseInt(pos)-parseInt(qnt));
     svalue(price);
-    fvalue((fund-(price*qnt)));
+    fvalue((fund-(price*Math.abs(qnt))));
   }
     
     else{
@@ -143,11 +159,12 @@ function App() {
   }
    else if(pos>0){
     var price=parseFloat(candlestickData[iloc].close);
-    pvalue(pos-qnt);
     svalue((price));
-    fvalue((fund+(price*qnt)));
-    cbvalue((cb+pl));
+    fvalue(parseFloat(fund+(price*Math.abs(pos))));
+    cbvalue(parseFloat(cb+pl));
     plvalue(0);
+    pvalue(0);
+
 
 
    }
@@ -156,23 +173,19 @@ function App() {
   function setq(){
     var qv=document.getElementById('qnt').value;
     qvalue(qv);
-    console.log(qnt);
     var price=parseFloat(candlestickData[iloc].close);
 
-    var tn= (price*qnt);
-    if(tn>fund){
-      alert("shorfall of "+(tn-fund));
-    }
-
+    var tn= (price*Math.abs(qnt));
+   
   }
 
 function plFunction(){ 
 
   if(pos>0){ 
-    plvalue(((parseFloat(candlestickData[iloc].close)-buy_price)*qnt));
+    plvalue(((parseFloat(candlestickData[iloc].close)-buy_price)*Math.abs(pos)));
      }
   else if(pos<0){ 
-    plvalue(((parseFloat(sell_price-parseFloat(candlestickData[iloc].close)))*qnt));
+    plvalue(((parseFloat(sell_price-parseFloat(candlestickData[iloc].close)))*Math.abs(pos)));
      }}
 
 
@@ -180,9 +193,9 @@ function plFunction(){
     if (pos>0){
       var price=parseFloat(candlestickData[iloc].close);
       svalue(price);
-      fvalue((fund+(price*pos)));
-      pvalue(0);
-      cbvalue((cb+pl));
+      fvalue((fund+(price*Math.abs(pos))));
+      pvalue(parseInt(0));
+      cbvalue(parseFloat(cb+pl));
       plvalue(0);
 
 
@@ -193,10 +206,10 @@ function plFunction(){
     else if(pos<0){
       var price=parseFloat(candlestickData[iloc].close);
     bvalue(price);
-    fvalue((fund+(sell_price+(sell_price-price))*pos));
-    pvalue(0);
+    fvalue(parseFloat(fund+(sell_price+(sell_price-price))*Math.abs(pos)));
+    pvalue((parseInt(0)));
 
-    cbvalue((cb+pl));
+    cbvalue(parseFloat(cb+pl));
     plvalue(0);
 
 
@@ -222,9 +235,11 @@ function plFunction(){
   
 
     <div style={{backgroundColor:'chocolate'}}> 
+
     <div style={{backgroundColor:'gray'}}>
           <label style={{marginTop:'30px'}} >enter qnty</label>
-          <input onChange={setq} style={{width:'8vw',borderColor:"darkslategrey"}} id='qnt' type='number' max={2} min={1}></input>
+          <input  onChange={setq} style={{width:'8vw',borderColor:"darkslategrey"}} id='qnt' type='number' max={2} min={1}></input>    <button style={{backgroundColor:'Highlight',borderRadius:'8px'}} onClick={setmaxq}>Maxqnt</button><br/>
+
         </div>
           <div>
            <button style={{backgroundColor:'green',width:'5vw',marginTop:'10px'}} onClick={buy}>Buy</button>     
@@ -233,8 +248,8 @@ function plFunction(){
            <br/>
            <button onClick={squareOff} style={{color:'red',backgroundColor:'black' ,width:'10vw',height:'30px' ,border:"solid red"}}>square off</button>
            <br/>
-           <h4>buy:{buy_price}</h4><br/>
-           <h4>sell:{sell_price}</h4>
+           <h4 style={{backgroundColor:'green'}}>buy:{buy_price.toFixed(2)}</h4><br/>
+           <h4 style={{backgroundColor:'red'}}>sell:{sell_price.toFixed(2)}</h4>
 
         
     </div>
