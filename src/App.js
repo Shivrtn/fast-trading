@@ -80,7 +80,7 @@ function App() {
 
       // Show candles one by one with a delay of 1 second
       const showCandlesWithDelay = () => {
-        let i = 0;
+        let i = 500;
         const interval = setInterval(() => {
           if (i < candlestickData.length) {
             ivalue(i);
@@ -137,9 +137,9 @@ function App() {
   }
   function setmaxq(){
     var num=(fund/parseInt(parseFloat(candlestickData[iloc].close)));
-    qvalue(parseInt(num));
+    qvalue(parseInt(num-(num/10)));
 
-    document.getElementById('qnt').value=parseInt(num)
+    document.getElementById('qnt').value=parseInt(num-(num/10))
   }
 
 
@@ -197,11 +197,6 @@ function plFunction(){
       pvalue(parseInt(0));
       cbvalue(parseFloat(cb+pl));
       plvalue(0);
-
-
-
-
-
     }
     else if(pos<0){
       var price=parseFloat(candlestickData[iloc].close);
@@ -211,11 +206,35 @@ function plFunction(){
 
     cbvalue(parseFloat(cb+pl));
     plvalue(0);
-
-
     }
   }
+function onSubmit(){
+  console.log('hy submit');
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:2000/post", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        key1: 'value1',
+        key2: 'value2'
+      })
+      });
+      const jsonData = await response.json();
+      setCandlestickData(jsonData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    }
+  };
 
+  fetchData();
+
+
+}
 
 
   return (
@@ -235,6 +254,14 @@ function plFunction(){
   
 
     <div style={{backgroundColor:'chocolate'}}> 
+    <div style={{backgroundColor:'ThreeDFace' ,padding:'10px',borderRadius:"10px",marginBottom:'10px'}}>
+      <label>symbol</label><br/>
+      <input type='text' value={'not workes'} style={{width:"10vw"}} ></input>
+
+
+      <input type='submit' onClick={onSubmit} style={{backgroundColor:'burlywood'}}></input>
+
+    </div>
 
     <div style={{backgroundColor:'gray'}}>
           <label style={{marginTop:'30px'}} >enter qnty</label>

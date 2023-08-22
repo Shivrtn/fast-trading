@@ -45,7 +45,11 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     const jsonData = JSON.parse(data);
     res.json(jsonData);
 
+
     // You can now work with the parsed JSON data as a JavaScript object
+
+
+    
   } catch (parseError) {
     console.error('Error parsing JSON:', parseError);
   }
