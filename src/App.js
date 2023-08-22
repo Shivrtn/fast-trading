@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:2000/post", {
+        const response = await fetch("https://fsserver.onrender.com/post", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -212,7 +212,7 @@ function onSubmit(){
   console.log('hy submit');
   const fetchData = async () => {
     try {
-      const response = await fetch("https://fsserver.onrender.com/", {
+      const response = await fetch("https://fsserver.onrender.com/post", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -222,6 +222,7 @@ function onSubmit(){
         key2: 'value2'
       })
       });
+
       const jsonData = await response.json();
       setCandlestickData(jsonData);
       setLoading(false);
@@ -255,11 +256,11 @@ function onSubmit(){
 
     <div style={{backgroundColor:'chocolate'}}> 
     <div style={{backgroundColor:'ThreeDFace' ,padding:'10px',borderRadius:"10px",marginBottom:'10px'}}>
-      <label>symbol</label><br/>
-      <input type='text' value={'not workes'} style={{width:"10vw"}} ></input>
+      <label>symbol</label><br/><h3>BANKBARODA</h3>
+      {/* <input type='text' value={'added soon'} style={{width:"10vw"}} ></input>
 
 
-      <input type='submit' onClick={onSubmit} style={{backgroundColor:'burlywood'}}></input>
+      <input type='submit' style={{backgroundColor:'burlywood'}}></input> */}
 
     </div>
 
