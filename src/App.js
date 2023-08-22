@@ -212,7 +212,7 @@ function onSubmit(){
   console.log('hy submit');
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:2000/post", {
+      const response = await fetch("https://fsserver.onrender.com/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
