@@ -77,10 +77,13 @@ function App() {
         wickUpColor: '#26a69a',
         wickDownColor: '#ef5350',
       });
+       const r=parseInt(100*Math.random());
+
+      candlestickSeries.setData(candlestickData.slice(1,r));
 
       // Show candles one by one with a delay of 1 second
       const showCandlesWithDelay = () => {
-        let i = 500;
+        let i = r;
         const interval = setInterval(() => {
           if (i < candlestickData.length) {
             ivalue(i);
@@ -94,7 +97,7 @@ function App() {
           } else {
             clearInterval(interval);
           }
-        }, 2000);
+        }, 1500);
       };
 
       showCandlesWithDelay();
@@ -256,7 +259,7 @@ function onSubmit(){
 
     <div style={{backgroundColor:'chocolate'}}> 
     <div style={{backgroundColor:'ThreeDFace' ,padding:'10px',borderRadius:"10px",marginBottom:'10px'}}>
-      <label>symbol</label><br/><h3>BANKBARODA</h3>
+      <label>symbol</label><br/><h3>Nifty-50 </h3>
       {/* <input type='text' value={'added soon'} style={{width:"10vw"}} ></input>
 
 
