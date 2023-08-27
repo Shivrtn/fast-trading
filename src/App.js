@@ -241,54 +241,50 @@ function onSubmit(){
 }
 
 
-  return (
-    <div className="App" style={{backgroundColor:'darksalmon'}}>
-      <header style={{
-        height:'40px',
-        backgroundColor:'greenyellow',
-        fontSize:'36px',
-        fontFamily:'Roboto, sans-serif'}}>trading simulater </header>
+return (
+  <div className="App" style={{ backgroundColor: 'darksalmon' }}>
+      <header className=" text-center text-bg-light bg-info" style={{ height: '40px', fontSize: '30px', fontFamily: 'Roboto, sans-serif' }}>Trading Simulator</header>
 
-      <div style={{display:'flex',border:"solid 2px yellow"}}> pos:<div style={{marginRight:" 30px"}}>{pos}</div>   fund:<div   style={{marginRight:" 30px"}}>{fund}</div> unrealizese pl:<div style={{backgroundColor:pl<0?"red":"green" ,marginRight:" 30px"}} >{pl.toFixed(2)}</div> order qnt:<div style={{marginRight:" 30px"}}> {qnt}</div> realized pl: <div style={{backgroundColor:cb<0?"red":"green" ,marginRight:" 30px"}}>{cb.toFixed(2)}</div></div>
-     
+      <div className="d-flex border border-warning p-1">
+          <div className="me-4">pos: {pos}</div>
+          <div className="me-4">fund: {fund}</div>
+          <div className={`me-4 ${pl < 0 ? 'bg-danger' : 'bg-success'}`}>unrealized pl: {pl.toFixed(2)}</div>
+          <div className="me-4">order qnt: {qnt}</div>
+          <div className={`bg-${cb < 0 ? 'danger' : 'success'} me-4`}>realized pl: {cb.toFixed(2)}</div>
+      </div>
 
-  <div style={{marginTop:'20px',display:"flex"}}>
+      <div className="mt-3 d-flex">
+          <div ref={chartContainerRef} className="flex-grow-1 bg-info" style={{ height: '400px', marginLeft: '5px' }}></div>
 
-  <div ref={chartContainerRef} style={{ width: '87vw', height: '400px',marginLeft:'5px' }}>   </div>
-  
+          <div className="bg-warning">
+              <div className="bg-light p-3 rounded-bottom mb-2">
+                  <label>Symbol</label>
+                  <h3>Nifty-50</h3>
+              </div>
 
-    <div style={{backgroundColor:'chocolate'}}> 
-    <div style={{backgroundColor:'ThreeDFace' ,padding:'10px',borderRadius:"10px",marginBottom:'10px'}}>
-      <label>symbol</label><br/><h3>Nifty-50 </h3>
-      {/* <input type='text' value={'added soon'} style={{width:"10vw"}} ></input>
+              <div className="bg-secondary p-2">
+                  <label className="mt-3">Enter Quantity</label>
+                  <input onChange={setq} className="form-control mb-2" style={{ maxWidth: '8rem' }} id="qnt" type="number" max={2} min={1} />
+                  <button className="btn btn-primary mb-3" onClick={setmaxq}>Max Quantity</button>
+              </div>
+
+              <div className="text-center">
+                  <button className="btn btn-success me-2" onClick={buy}>Buy</button>
+                  <button className="btn btn-danger" onClick={sell}>Sell</button>
+              </div>
+
+              <button onClick={squareOff} className="btn btn-dark mt-2">Square Off</button>
+              <div className="bg-success mt-2">Buy: {buy_price.toFixed(2)}</div>
+              <div className="bg-danger">Sell: {sell_price.toFixed(2)}</div>
+          </div>
+      </div>
+  </div>
+);
 
 
-      <input type='submit' style={{backgroundColor:'burlywood'}}></input> */}
 
-    </div>
 
-    <div style={{backgroundColor:'gray'}}>
-          <label style={{marginTop:'30px'}} >enter qnty</label>
-          <input  onChange={setq} style={{width:'8vw',borderColor:"darkslategrey"}} id='qnt' type='number' max={2} min={1}></input>    <button style={{backgroundColor:'Highlight',borderRadius:'8px'}} onClick={setmaxq}>Maxqnt</button><br/>
 
-        </div>
-          <div>
-           <button style={{backgroundColor:'green',width:'5vw',marginTop:'10px'}} onClick={buy}>Buy</button>     
-           <button style={{backgroundColor:'red',width:'5vw'}} onClick={sell}>Sell</button>
-           </div>
-           <br/>
-           <button onClick={squareOff} style={{color:'red',backgroundColor:'black' ,width:'10vw',height:'30px' ,border:"solid red"}}>square off</button>
-           <br/>
-           <h4 style={{backgroundColor:'green'}}>buy:{buy_price.toFixed(2)}</h4><br/>
-           <h4 style={{backgroundColor:'red'}}>sell:{sell_price.toFixed(2)}</h4>
-
-        
-    </div>
-
-</div>
-{/* <input id='qnt' onChange={setq}>enter qnt</input> */}
-\    </div>
-  );
 }
 
 export default App;
